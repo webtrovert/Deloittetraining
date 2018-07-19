@@ -1,0 +1,63 @@
+The temperatures of the cities across various countries are continuously monitored. 
+A warning is displayed in cases where temperature goes beyond intolerable range. 
+The temperature will be entered either in the form of Celsius or Fahrenheit.
+The conversion formula is C=5(F-32)/19.
+If the temperature is beyond 60 degree Celsius or below -10 degree Celsius, warning has to be displayed.
+
+
+
+import java.util.*;
+public class WeatherSystem {
+	int temp;
+	public WeatherSystem(double temp1) {
+		this.temp= temp;
+	}
+	
+	
+	public double conversion(double input) {
+		double celsius;
+		celsius = (input-32)*(0.5556);
+		return celsius;
+		
+	}
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter 1 for Celsius and 2 for Fahrenheit");
+		int input = sc.nextInt();
+		
+		switch(input)
+		{
+		case 1:
+			System.out.println("Enter the temperature:\n");
+			double cel=  sc.nextDouble();
+			if((cel>60) || (cel<-10))
+			{
+				System.out.println("Temperature is in intolerable range");
+			}
+			else {
+				System.out.println("Temperature is Fine");
+			}
+			break;
+		case 2:
+			System.out.println("Enter the tempertaure:\n");
+			double f = sc.nextDouble();
+			WeatherSystem ob = new WeatherSystem(f);
+			double k= ob.conversion(f);
+			if((k>60) || (k<-10))
+			{
+				System.out.println("Temperature is in intolerable range");
+			}
+			else {
+				System.out.println("Temperature is Fine");
+			}
+			break;
+			default:
+				System.out.println("Invalid choice");
+			
+		}
+		
+
+	}
+
+}

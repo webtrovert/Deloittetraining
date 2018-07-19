@@ -1,0 +1,330 @@
+insert into  Persons (city,Firstname) values('Jaipur','Girish');
+
+
+create table Student_info
+(
+sid char(6),
+Name varchar(20),
+dob date,
+doj date
+);
+
+insert into Student_info values('100','Tufail',1995-11-11,2008-11-11)
+insert into Student_info values('101','Tarun','1998-11-11','2008-06-11')
+
+
+create table Student_G
+(
+Roll varchar(10) primary key,
+Name varchar(20) not null,
+Address varchar(20) check(Address in('Chennai','Mumbai','Kolkata')),
+Marks number check (Marks between 0 and 100)
+);
+
+Create table loan_payment
+(
+Loanno number(4) constraint myloanconstraint primary key,
+Loan_status varchar2(10) constraint loanstatuscons check(loan_status=upper(loan_status)),
+loan_amount number(10) not null,
+update_date date default sysdate,
+product_key varchar2(5)
+)
+
+
+
+
+
+Create a table called Employee with the following Columns  and perform the following operations:-
+------------------------------------------------------------------------------------------------------------
+
+EmployeeID    
+EmployeeName   
+EmployeeAddress : 
+DOB
+DOJ
+Salary
+
+
+a.) Insert five records
+
+b) Retrieve all the records
+
+
+c) Retrieve the Employee name whose salary is greater than 20000
+
+d) Retrieve the Employee name whose address contains 'a' or 'p' or 'r'  as the last character
+ 
+e) Increase the Salary of all the Employee by 20%
+
+f) Delete all the employee records whose salary is less than 5000
+
+
+
+
+
+
+create table Employee
+(
+EmployeeID varchar(10),
+EmployeeName varchar(20),
+EmployeeAddress varchar(20),
+DOB date,
+DOJ date,
+Salary number(10)
+);
+
+a). insert into Employee values('100','Gaurav','Bangalore',date '1995-05-20',date '2018-07-16',600000);
+insert into Employee values('101','Ritu','Bangalore',date '1996-05-20',date '2018-07-16',700000);
+insert into Employee values('102','Ahmed','Mumbai',date '1996-09-10',date '2018-07-16',700000);
+insert into Employee values('103','Harman','Hyderabad',date '1996-09-30',date '2018-07-26',870000);
+insert into Employee values('104','Okay','Hyderabad',date '1996-10-30',date '2018-08-26',430000);
+
+
+b). select * from Employee;
+
+c). select EmployeeName, Salary from Employee where salary>20000;
+
+
+d). select EmployeeName from Employee where EmployeeAddress like '%a' or EmployeeAddress like '%p' or EmployeeAddress like '%r';
+
+
+e). update Employee set salary= salary*1.2;
+
+f). Delete from Employee where salary<5000;
+
+===================================================================================================================================
+Date - 17.07.18
+
+Demo - 1:
+
+create table AB_emp
+(
+emp_no numeric(3) primary key,
+empname varchar2(20) not null,
+salary numeric (8,2),
+designation varchar2(20),
+dept_no numeric(3)
+);
+
+
+create table AB2_dept
+(
+dept_no numeric(3) primary key,
+dept_name varchar2(20),
+location varchar2(20)
+);
+
+
+alter table AB_emp add constraint myfk_1 foreign key(dept_no) references AB2_dept(dept_no);
+
+
+ insert into AB2_dept values('009','HR','Bangalore');
+
+1 row created.
+
+SQL> insert into AB_emp values('1','Anu','8000','Consultant','009');
+
+1 row created.
+
+SQL> select * from AB_emp;
+
+    EMP_NO EMPNAME                  SALARY DESIGNATION             DEPT_NO
+---------- -------------------- ---------- -------------------- ----------
+         1 Anu                        8000 Consultant                    9
+
+
+
+
+======================================================================================
+
+
+Demo -2: Giving constraints at the last (useful when assigning more than 1 primary key)
+
+
+create table supplier
+(
+supplier_id numeric(10) not null,
+supplier_name varchar2(50) not null,
+contact_name varchar2(50),
+constraint supplier_pk 	PRIMARY KEY(supplier_id)
+);
+
+
+create table products
+(
+product_id numeric(10) not null,
+supplier_id numeric(10) not null,
+constraint fk_supplier
+foreign key(supplier_id)			//This is pointing to this table itself
+references supplier(supplier_id)		//This is pointing to the upper table
+);
+
+==============================================================================
+Add column-
+alter table student_T add email varchar2(20)
+
+Add constraint to a column-
+alter table student_T add constraint emailConstraint check (email in('A','B','C'));
+
+Drop constraint-
+ALTER TABLE student_T
+DROP CONSTRAINT emailConstraint;
+
+Drop column-
+alter table student_T drop column email;
+
+====================================================================================
+
+Demo-3: Cascade Delete concept -
+
+
+create table section_t
+(
+section_id number(3) constraint s_id check(section_id>0),
+section_name char(30) constraint s_name not null,
+book_count number(6),
+constraint sect_prime primary key(section_id));
+
+
+create table book_t
+(
+isbn number(10) constraint b_isbn check (isbn between 1 and 2000),
+title varchar2(200) constraint b_title not null,
+author varchar2(50) constraint b_auth not null,
+lent_date date,
+returned_date date,
+times_lent number(6),
+section_id number(3),
+constraint book_prime primary key(isbn),
+constraint book_sect foreign key(section_id) references section_t(section_id)
+on delete cascade);
+
+
+insert into section_t values(1,'ABC',78);
+insert into section_t values(2,'XYZ',65);
+
+insert into book_t values(1,'XYZ','Polar',date '2008-05-16',date '2009-05-16',5,2);
+
+delete from section_t where section_id=2;	//This will delete the row in section_t table as well as the rows in book_t table(having the given section id) because we chose cascade delete
+
+
+======================================================================================================================================================
+
+Demo - 4: Sub-Query
+
+create table Stu_d
+(
+roll number(20),
+name varchar2(20)
+);
+
+
+create table fees_d
+(
+roll number(20),
+amount number(10)
+);
+
+
+insert into stu_d values(&roll,'&name');
+Enter value for roll: 13
+Enter value for name: Anu
+old   1: insert into stu_d values(&roll,'&name')
+new   1: insert into stu_d values(13,'Anu')
+
+1 row created.
+
+SQL> insert into stu_d values(&roll,'&name');
+Enter value for roll: 14
+Enter value for name: Lol
+old   1: insert into stu_d values(&roll,'&name')
+new   1: insert into stu_d values(14,'Lol')
+
+1 row created.
+
+SQL> insert into fees_d values(&roll,&amount);
+Enter value for roll: 13
+Enter value for amount: 9000
+ old   1: insert into fees_d values(&roll,&amount)
+new   1: insert into fees_d values(13,9000)
+
+1 row created.
+
+SQL> insert into fees_d values(&roll,&amount);
+Enter value for roll: 14
+Enter value for amount: 9000
+old   1: insert into fees_d values(&roll,&amount)
+new   1: insert into fees_d values(14,9000)
+
+1 row created.
+
+SQL> select name from stu_d where roll in (select roll from fees_d where amount=9000);		//Since here more than 1 person is depositing fees of 9000 so we are using 'IN' and not '='
+OUTPUT-
+
+NAME
+--------------------
+Anu
+Lol
+
+===========================================================================================================================================================
+
+Demo-5:JOINS (Equi/INNER Join)
+
+create table Suppliers
+(
+   supplier_id varchar(20),
+   supplier_name varchar(20)
+);
+
+create table Orders
+(
+  order_id varchar(20),
+   supplier_id varchar(20),
+   order_date date
+);
+
+
+insert into Suppliers values('10000','IBM')
+insert into Suppliers values('10001','Hewlett Packard')
+insert into Suppliers values('10002','Microsoft')
+insert into Suppliers values('10003','TCS')
+
+insert into Orders values('1','10000',to_date('3/3/09','mm/dd/yy'))
+insert into Orders values('2','10000',to_date('7/5/10','mm/dd/yy'))
+insert into Orders values('3','10001',to_date('12/8/10','mm/dd/yy'))
+
+
+
+select order_id, supplier_name from orders, suppliers where suppliers.supplier_id=orders.supplier_id;
+
+ORDER_ID             SUPPLIER_NAME
+-------------------- --------------------
+2                    IBM
+1                    IBM
+3                    Hewlett Packard
+
+
+select suppliers.supplier_id, suppliers.supplier_name,orders.order_date from suppliers, orders where suppliers.supplier_id=orders.supplier_id(+);			//This is outer join '+'
+
+==========================================================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
